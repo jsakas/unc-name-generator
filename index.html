@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unc Name Generator</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Optional: Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Optional: Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <meta name="theme-color" content="#0b1220" />
+
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+        background: radial-gradient(1200px 600px at 50% -10%, #1f2a55 0%, transparent 60%),
+          radial-gradient(900px 500px at 10% 10%, rgba(34, 197, 94, 0.15) 0%, transparent 60%),
+          radial-gradient(900px 500px at 90% 20%, rgba(168, 85, 247, 0.18) 0%, transparent 60%),
+          #070a12;
+      }
+      .noise {
+        pointer-events: none;
+        position: fixed;
+        inset: 0;
+        opacity: 0.06;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+        background-size: 180px 180px;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+      }
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+      }
+    </style>
+  </head>
+
+  <body class="text-white selection:bg-fuchsia-500/40 selection:text-white">
+    <div class="noise"></div>
+
+    <main class="mx-auto max-w-5xl px-4 py-10 md:py-16">
+      <header class="mb-8 md:mb-10">
+        <div class="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm text-white/80">
+          <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+          <span>peer-reviewed uncology • all results are spicy</span>
+        </div>
+
+        <h1 class="mt-5 text-4xl font-bold tracking-tight md:text-6xl">Unc Name Generator</h1>
+        <p class="mt-3 max-w-2xl text-base text-white/70 md:text-lg">
+          Generate a screenshot-worthy “unc name” for you, your friends, your coworker who prints PDFs, or
+          the guy who says “watch this” before doing something irreversible.
+        </p>
+      </header>
+
+      <section class="glass rounded-3xl p-5 md:p-7 shadow-2xl shadow-black/30">
+        <div class="grid gap-6 md:grid-cols-2">
+          <!-- Controls -->
+          <div class="space-y-4">
+            <label class="block text-sm font-semibold text-white/80" for="nameInput">
+              Optional: first name (leave blank for a random one)
+            </label>
+
+            <!-- Generate button moved where Random used to be -->
+            <div class="flex gap-2">
+              <input
+                id="nameInput"
+                type="text"
+                placeholder="e.g., Steve"
+                class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-emerald-400/60"
+              />
+              <button
+                id="generateBtnTop"
+                class="shrink-0 rounded-2xl bg-emerald-500 px-4 py-3 font-semibold text-black hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/70"
+                title="Generate"
+              >
+                <span class="inline-flex items-center gap-2">
+                  <i data-lucide="sparkles" class="h-4 w-4"></i>
+                  <span class="hidden sm:inline">Generate</span>
+                </span>
+              </button>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
+              <div class="text-xs font-semibold text-white/70">Vibe</div>
+              <select
+                id="vibeSelect"
+                class="mt-1 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-white/90 focus:outline-none focus:ring-2 focus:ring-fuchsia-400/50"
+              >
+                <option value="any" selected>Any (best)</option>
+                <option value="classic">Classic Unc</option>
+                <option value="cookout">Cookout Unc</option>
+                <option value="gym">Gym Unc</option>
+                <option value="tech">Tech Unc</option>
+                <option value="money">Money Unc</option>
+                <option value="car">Car Unc</option>
+                <option value="sports">Sports Unc</option>
+                <option value="office">Office Unc</option>
+                <option value="dad">Dad Unc</option>
+                <option value="music">Music Unc</option>
+                <option value="outdoors">Outdoors Unc</option>
+              </select>
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-1">
+              <!-- Removed sharing; kept Copy + Generate 10 -->
+              <button
+                id="generate10Btn"
+                class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
+              >
+                <i data-lucide="layers" class="h-5 w-5"></i>
+                Generate 10
+              </button>
+
+              <button
+                id="copyBtn"
+                class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
+              >
+                <i data-lucide="copy" class="h-5 w-5"></i>
+                Copy
+              </button>
+            </div>
+
+            <p class="text-xs text-white/45">
+              Tip: hit <span class="mono">Enter</span> to generate • leave name blank for random.
+            </p>
+          </div>
+
+          <!-- Output -->
+          <div class="space-y-3">
+            <div class="rounded-3xl border border-white/10 bg-black/30 p-5 md:p-6">
+              <div class="flex items-center justify-between gap-3">
+                <div class="text-sm font-semibold text-white/70">Your unc name is:</div>
+                <span
+                  id="badge"
+                  class="hidden rounded-full bg-fuchsia-500/20 px-3 py-1 text-xs font-semibold text-fuchsia-200 ring-1 ring-fuchsia-400/30"
+                ></span>
+              </div>
+
+              <div id="output" class="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+                Click Generate 👈
+              </div>
+
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span class="rounded-full bg-white/5 px-3 py-1 text-xs text-white/70 ring-1 ring-white/10">
+                  curated chaos
+                </span>
+                <span class="rounded-full bg-white/5 px-3 py-1 text-xs text-white/70 ring-1 ring-white/10">
+                  screenshot bait
+                </span>
+                <span class="rounded-full bg-white/5 px-3 py-1 text-xs text-white/70 ring-1 ring-white/10">
+                  zero build step
+                </span>
+              </div>
+            </div>
+
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <div class="flex items-center justify-between">
+                <div class="text-sm font-semibold text-white/70">Recent pulls</div>
+                <button
+                  id="clearHistoryBtn"
+                  class="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+                >
+                  Clear
+                </button>
+              </div>
+              <ul id="history" class="mt-3 space-y-2 text-sm text-white/80"></ul>
+            </div>
+
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <div class="flex items-center justify-between">
+                <div class="text-sm font-semibold text-white/70">Rapid-fire (Generate 10)</div>
+                <button
+                  id="clearBatchBtn"
+                  class="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+                >
+                  Clear
+                </button>
+              </div>
+              <ul id="batch" class="mt-3 space-y-2 text-sm text-white/80"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="mt-8 text-center text-xs text-white/45">
+        Made for GitHub Pages • drop in <span class="mono">index.html</span> and ship.
+      </footer>
+    </main>
+
+    <script>
+      // Icons
+      try { lucide.createIcons(); } catch (_) {}
+
+      // ---------- Utilities ----------
+      function mulberry32(seed) {
+        return function () {
+          let t = (seed += 0x6d2b79f5);
+          t = Math.imul(t ^ (t >>> 15), t | 1);
+          t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      function hashString(str) {
+        let h = 2166136261;
+        for (let i = 0; i < str.length; i++) {
+          h ^= str.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+      }
+
+      function choice(rng, arr) {
+        return arr[Math.floor(rng() * arr.length)];
+      }
+
+      function weightedChoice(rng, items) {
+        const total = items.reduce((s, x) => s + x.w, 0);
+        let roll = rng() * total;
+        for (const it of items) {
+          roll -= it.w;
+          if (roll <= 0) return it.v;
+        }
+        return items[items.length - 1].v;
+      }
+
+      function chance(rng, p) {
+        return rng() < p;
+      }
+
+      function clampName(raw) {
+        const s = (raw || "").trim();
+        if (!s) return "";
+        return s.replace(/\s+/g, " ").replace(/[^a-zA-Z0-9 .'-]/g, "").slice(0, 18);
+      }
+
+      function titleCase(s) {
+        if (!s) return s;
+        return s.charAt(0).toUpperCase() + s.slice(1);
+      }
+
+      function cleanup(str) {
+        return str
+          .replace(/\s+/g, " ")
+          .replace(/\bUnc Unc\b/g, "Unc")
+          .replace(/\bOG Unc\b/g, "OG")
+          .replace(/\bUnc OG\b/g, "OG")
+          .replace(/\bBig Unc Unc\b/g, "Big Unc")
+          .trim();
+      }
+
+      // ---------- Data ----------
+      const FIRST_NAMES = [
+        "Steve","Mike","Tony","Dave","Rick","Greg","Leo","Earl","Harold","Lenny","Stan","Cliff","Barry","Wayne","Randy","Chad","Dale","Clint","Hank",
+        "Dre","Marcus","Andre","Jamal","Ty","Cal","Nate","Bryce","Cole","Cody","Zay","Ray","Omar","Dylan","Brandon","Eddie","Kyle","Noah","Ben",
+        "Shawn","Tre","Vince","CJ","TJ","AJ","JR","Kenny","Duke","Miles","Mason","Jordan","Frank","Sal","Gio","Roman","Luis","Darius","DeShawn",
+        "Malik","Ant","Curtis","Rob","Pat","Gene","Larry","Keith","Terrance","Ron","Glen","Doug","Bobby","Jimmy","Al","Stu","Mo"
+      ];
+
+      const TITLES = [
+        { v: "Unc", w: 40 },
+        { v: "Big Unc", w: 10 },
+        { v: "OG", w: 9 },
+        { v: "Coach", w: 9 },
+        { v: "Old Head", w: 7 },
+        { v: "Big Bro", w: 6 },
+        { v: "Pops", w: 3 },
+        { v: "Unc Daddy", w: 4 },
+        { v: "Unc General", w: 2 },
+        { v: "Mr. Unc", w: 2 },
+        { v: "Captain Unc", w: 2 },
+        { v: "Unc Chairman", w: 1 }
+      ];
+
+      const MODIFIERS = {
+        any: [
+          { v: "Certified", w: 18 },
+          { v: "Back-in-My-Day", w: 14 },
+          { v: "Always-Right", w: 10 },
+          { v: "No-Text-Just-Calls", w: 10 },
+          { v: "Two-Beer-Max", w: 9 },
+          { v: "Light-Work", w: 8 },
+          { v: "Don’t-Need-Google", w: 7 },
+          { v: "Remote-Control-CEO", w: 7 },
+          { v: "Neighborhood-Watch", w: 6 },
+          { v: "Curb-Alert", w: 5 },
+          { v: "Unsolicited-Advice", w: 5 },
+          { v: "Group-Chat-Menace", w: 4 },
+          { v: "Self-Appointed", w: 4 },
+          { v: "Weekend-Warrior", w: 4 },
+          { v: "Facebook-Comment-Section", w: 4 },
+          { v: "Receipt-Collector", w: 3 },
+          { v: "Thermostat-Enforcer", w: 3 },
+          { v: "Says-“Real-Quick”", w: 3 },
+          { v: "Calls-Everyone-“Boss”", w: 3 },
+          { v: "Has-Opinions-About-Batteries", w: 2 },
+          { v: "We-Needed-It", w: 3 }
+        ],
+        classic: [
+          { v: "Back-in-My-Day", w: 18 },
+          { v: "Certified", w: 9 },
+          { v: "No-Text-Just-Calls", w: 9 },
+          { v: "Always-Right", w: 8 },
+          { v: "Handshake-Firm", w: 7 },
+          { v: "Weather-App-Prophet", w: 6 },
+          { v: "Remote-Control-CEO", w: 6 },
+          { v: "Talks-To-Strangers", w: 5 },
+          { v: "Early-To-The-Function", w: 5 },
+          { v: "Unsolicited-Advice", w: 4 },
+          { v: "Calls-It-“The-Interstate”", w: 3 },
+          { v: "We-Needed-It", w: 3 }
+        ],
+        cookout: [
+          { v: "Grill-Captain", w: 18 },
+          { v: "BBQ-PhD", w: 9 },
+          { v: "Charcoal-Purist", w: 8 },
+          { v: "Tongs-On-Hips", w: 8 },
+          { v: "Hot-Sauce-Evangelist", w: 7 },
+          { v: "Secret-Rub-Recipe", w: 7 },
+          { v: "Nap-After-This", w: 6 },
+          { v: "Cooks-By-Vibes", w: 6 },
+          { v: "Potato-Salad-Police", w: 5 },
+          { v: "Brings-The-Ice", w: 4 },
+          { v: "Meat-Thermometer-Enforcer", w: 3 },
+          { v: "We-Needed-It", w: 3 }
+        ],
+        gym: [
+          { v: "Knee-Sleeves-24/7", w: 11 },
+          { v: "No-Warmup", w: 10 },
+          { v: "Form-Police", w: 9 },
+          { v: "Light-Work", w: 9 },
+          { v: "One-More-Set", w: 8 },
+          { v: "Protein-Shake-CEO", w: 7 },
+          { v: "Belt-Tight", w: 6 },
+          { v: "Rest-Timer-Manager", w: 5 },
+          { v: "Preworkout-Prophet", w: 4 },
+          { v: "Says-“Control-The-Negative”", w: 3 },
+          { v: "We-Needed-It", w: 2 }
+        ],
+        tech: [
+          { v: "Prints-PDFs", w: 12 },
+          { v: "Hates-Updates", w: 10 },
+          { v: "Two-Factor-Complainer", w: 9 },
+          { v: "Still-Has-Aux-Cable", w: 8 },
+          { v: "Turn-It-Off-On", w: 8 },
+          { v: "Password-Notebook", w: 7 },
+          { v: "Tabs-Not-Spaces", w: 6 },
+          { v: "WiFi-Whisperer", w: 6 },
+          { v: "Bluetooth-Skeptic", w: 5 },
+          { v: "Reply-All-Enthusiast", w: 4 },
+          { v: "Says-“It’s-A-Browser-Thing”", w: 4 },
+          { v: "We-Needed-It", w: 2 }
+        ],
+        money: [
+          { v: "Cash-Only", w: 10 },
+          { v: "Receipts-Required", w: 10 },
+          { v: "Coupon-General", w: 9 },
+          { v: "Price-Matcher", w: 8 },
+          { v: "Budget-Prophet", w: 7 },
+          { v: "Handshake-Deal", w: 6 },
+          { v: "Side-Hustle-Professor", w: 6 },
+          { v: "Interest-Rate-Explainer", w: 5 },
+          { v: "Taxes-Are-Coming", w: 3 },
+          { v: "We-Needed-It", w: 2 }
+        ],
+        car: [
+          { v: "Oil-Change-Oracle", w: 10 },
+          { v: "Wrench-In-Trunk", w: 9 },
+          { v: "Tire-Pressure-Police", w: 9 },
+          { v: "Knows-A-Shortcut", w: 8 },
+          { v: "Bluetooth-AUX-Debate", w: 7 },
+          { v: "Cleans-The-Dashboard", w: 7 },
+          { v: "Parallel-Park-Professor", w: 3 },
+          { v: "Has-A-Jug-Of-Coolant", w: 3 },
+          { v: "We-Needed-It", w: 2 }
+        ],
+        sports: [
+          { v: "Fantasy-GM", w: 10 },
+          { v: "Highlights-Only", w: 9 },
+          { v: "Back-When-Defense", w: 8 },
+          { v: "Ref-You-Suck", w: 7 },
+          { v: "Monday-Morning-QB", w: 7 },
+          { v: "Stats-For-No-Reason", w: 6 },
+          { v: "Old-School-Fundamentals", w: 4 },
+          { v: "We-Needed-It", w: 2 }
+        ],
+        office: [
+          { v: "Reply-All-Enthusiast", w: 10 },
+          { v: "Meeting-Enjoyer", w: 9 },
+          { v: "Calendar-Blocker", w: 8 },
+          { v: "Mic-Not-Muted", w: 7 },
+          { v: "Slides-Too-Long", w: 6 },
+          { v: "As-Per-My-Last-Email", w: 6 },
+          { v: "Spreadsheet-Sorcerer", w: 4 },
+          { v: "Says-“Quick-Sync”", w: 4 },
+          { v: "We-Needed-It", w: 2 }
+        ],
+        dad: [
+          { v: "Dad-Jokes-Dealer", w: 10 },
+          { v: "Socks-And-Sandals", w: 8 },
+          { v: "Grunts-When-Sitting", w: 8 },
+          { v: "Garage-Fridge-Guardian", w: 7 },
+          { v: "Snack-Distribution-Manager", w: 6 },
+          { v: "Says-“Ask-Your-Mother”", w: 5 },
+          { v: "Turns-Off-Lights", w: 5 },
+          { v: "We-Needed-It", w: 2 }
+        ],
+        music: [
+          { v: "Bluetooth-DJ", w: 10 },
+          { v: "Playlist-Curator", w: 9 },
+          { v: "Volume-Too-Loud", w: 8 },
+          { v: "Says-“They-Don’t-Make-Music”", w: 8 },
+          { v: "Aux-Cord-Warlord", w: 6 },
+          { v: "Knows-Every-Lyric", w: 5 },
+          { v: "We-Needed-It", w: 2 }
+        ],
+        outdoors: [
+          { v: "Fishing-Lie-Professor", w: 10 },
+          { v: "Cooler-Organizer", w: 8 },
+          { v: "Bug-Spray-Enthusiast", w: 7 },
+          { v: "Campfire-Philosopher", w: 7 },
+          { v: "Says-“No-Maps-Needed”", w: 6 },
+          { v: "Headlamp-At-Noon", w: 4 },
+          { v: "We-Needed-It", w: 3 }
+        ]
+      };
+
+      const TAILS = [
+        { v: "With the Cargo Shorts", w: 9 },
+        { v: "Who Knows a Guy", w: 8 },
+        { v: "At the Cookout", w: 7 },
+        { v: "Still Uses Cash", w: 6 },
+        { v: "Who Won’t Text Back", w: 6 },
+        { v: "With the Bluetooth Speaker", w: 5 },
+        { v: "Who Says “Watch This”", w: 5 },
+        { v: "With the Lawn Chair", w: 5 },
+        { v: "Who Calls Everyone “Boss”", w: 4 },
+        { v: "With the Spare Charger", w: 4 },
+        { v: "Who Arrives Early", w: 4 },
+        { v: "Who Has a Flashlight", w: 4 },
+        { v: "Who Has Jumper Cables", w: 4 },
+        { v: "Who Says “Respectfully” Then Lies", w: 4 },
+        { v: "Who Starts Debates Unprovoked", w: 4 },
+        { v: "Who Asks for a Discount", w: 3 },
+        { v: "Who Won’t Let You Touch the Thermostat", w: 3 },
+        { v: "Who Brings Up Politics at Dinner", w: 2 },
+        { v: "Who Corrects Pronunciation Loudly", w: 2 },
+        { v: "…We Needed It", w: 4 }
+      ];
+
+      const FORMATS = [
+        { v: (t, m, n, tail) => [m, t, n, tail].filter(Boolean).join(" "), w: 18 },
+        { v: (t, m, n, tail) => [t, m, n, tail].filter(Boolean).join(" "), w: 20 },
+        { v: (t, m, n, tail) => [t, n, tail].filter(Boolean).join(" "), w: 12 },
+        { v: (t, m, n, tail) => [m, n, tail].filter(Boolean).join(" "), w: 8 },
+        { v: (t, m, n, tail) => ["Unc", m, n, tail].filter(Boolean).join(" "), w: 16 },
+        {
+          v: (t, m, n, tail) =>
+            [t, n, "“", m, "”", tail]
+              .filter(Boolean)
+              .join(" ")
+              .replace(/\s“\s/g, " “")
+              .replace(/\s”\s/g, "” "),
+          w: 6
+        },
+        { v: (t, m, n, tail) => [m, n, "-", t, tail].filter(Boolean).join(" "), w: 6 },
+        { v: (t, m, n, tail) => [t, n, "aka", m, tail].filter(Boolean).join(" "), w: 6 }
+      ];
+
+      function pickFromVibe(rng, vibe) {
+        const bucket = MODIFIERS[vibe] || MODIFIERS.any;
+        const useAny = chance(rng, 0.25);
+        const list = useAny ? MODIFIERS.any : bucket;
+        return weightedChoice(rng, list);
+      }
+
+      function generateUncName({ firstName, vibe }) {
+        const seedBase = `${firstName}|${vibe}|${Date.now()}|${Math.random()}`;
+        const rng = mulberry32(hashString(seedBase));
+
+        const name = firstName ? titleCase(firstName) : choice(rng, FIRST_NAMES);
+        const title = weightedChoice(rng, TITLES);
+
+        const m1 = pickFromVibe(rng, vibe);
+        const m2 = chance(rng, 0.33) ? pickFromVibe(rng, vibe) : "";
+        const mod2 = m2 && m2 !== m1 ? m2 : "";
+
+        let modifier = m1;
+        if (mod2 && chance(rng, 0.55)) modifier = `${m1} ${mod2}`;
+
+        const tailChance = 0.35;
+        const tail = chance(rng, tailChance) ? weightedChoice(rng, TAILS) : "";
+
+        let finalTitle = title;
+        if (finalTitle.length > 7 && modifier.split(" ").length > 2 && chance(rng, 0.65)) finalTitle = "Unc";
+
+        const fmt = weightedChoice(rng, FORMATS);
+        const out = cleanup(fmt(finalTitle, modifier, name, tail));
+
+        let label = "";
+        if (vibe !== "any") label = vibe.toUpperCase();
+        return { out, label };
+      }
+
+      // ---------- UI ----------
+      const $ = (id) => document.getElementById(id);
+
+      const nameInput = $("nameInput");
+      const vibeSelect = $("vibeSelect");
+      const output = $("output");
+      const badge = $("badge");
+      const historyEl = $("history");
+      const batchEl = $("batch");
+
+      const STORAGE_KEY = "uncgen_history_v5";
+
+      function loadHistory() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          const arr = raw ? JSON.parse(raw) : [];
+          return Array.isArray(arr) ? arr : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveHistory(arr) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(arr.slice(0, 10)));
+        } catch {}
+      }
+
+      function renderList(el, arr) {
+        el.innerHTML = "";
+        if (!arr.length) {
+          const li = document.createElement("li");
+          li.className = "text-white/45";
+          li.textContent = "Empty. Generate some uncs.";
+          el.appendChild(li);
+          return;
+        }
+
+        for (const item of arr) {
+          const li = document.createElement("li");
+          li.className =
+            "group flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/20 px-3 py-2 hover:bg-white/5";
+
+          const left = document.createElement("div");
+          left.className = "min-w-0";
+
+          const top = document.createElement("div");
+          top.className = "truncate font-semibold";
+          top.textContent = item;
+
+          const sub = document.createElement("div");
+          sub.className = "text-xs text-white/45";
+          sub.textContent = "tap to copy";
+
+          left.appendChild(top);
+          left.appendChild(sub);
+
+          const btn = document.createElement("button");
+          btn.className =
+            "shrink-0 rounded-xl border border-white/10 bg-white/5 px-2 py-1 text-xs font-semibold text-white/80 opacity-0 transition group-hover:opacity-100";
+          btn.textContent = "Copy";
+
+          li.addEventListener("click", async () => {
+            await copyToClipboard(item);
+            toast("Copied ✨");
+          });
+
+          btn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            await copyToClipboard(item);
+            toast("Copied ✨");
+          });
+
+          li.appendChild(left);
+          li.appendChild(btn);
+          el.appendChild(li);
+        }
+      }
+
+      function setOutput(name, label) {
+        output.textContent = name;
+
+        if (label) {
+          badge.textContent = label;
+          badge.classList.remove("hidden");
+        } else {
+          badge.classList.add("hidden");
+        }
+      }
+
+      async function copyToClipboard(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+        }
+      }
+
+      function toast(msg) {
+        const el = document.createElement("div");
+        el.className =
+          "fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-2xl border border-white/10 bg-black/70 px-4 py-3 text-sm font-semibold text-white shadow-xl shadow-black/40";
+        el.textContent = msg;
+        document.body.appendChild(el);
+        setTimeout(() => el.classList.add("opacity-0", "transition", "duration-300"), 1100);
+        setTimeout(() => el.remove(), 1500);
+      }
+
+      function generateAndRender() {
+        const firstName = clampName(nameInput.value);
+        const vibe = vibeSelect.value;
+
+        const { out, label } = generateUncName({ firstName, vibe });
+        setOutput(out, label);
+
+        const h = loadHistory();
+        const next = [out, ...h.filter((x) => x !== out)].slice(0, 10);
+        saveHistory(next);
+        renderList(historyEl, next);
+
+        return out;
+      }
+
+      function generateBatch(count) {
+        const items = [];
+        for (let i = 0; i < count; i++) items.push(generateAndRender());
+        const uniq = [...new Set(items)];
+        renderList(batchEl, uniq);
+        toast(`Generated ${uniq.length} uncs`);
+      }
+
+      // ---------- Events ----------
+      $("generateBtnTop").addEventListener("click", () => generateAndRender());
+      $("generate10Btn").addEventListener("click", () => generateBatch(10));
+
+      $("copyBtn").addEventListener("click", async () => {
+        const text = output.textContent || "";
+        if (!text || text === "Click Generate 👈") return toast("Generate one first");
+        await copyToClipboard(text);
+        toast("Copied ✨");
+      });
+
+      nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") generateAndRender();
+      });
+
+      $("clearHistoryBtn").addEventListener("click", () => {
+        saveHistory([]);
+        renderList(historyEl, []);
+        toast("History cleared");
+      });
+
+      $("clearBatchBtn").addEventListener("click", () => {
+        renderList(batchEl, []);
+        toast("Batch cleared");
+      });
+
+      // Init
+      renderList(historyEl, loadHistory());
+      renderList(batchEl, []);
+    </script>
+  </body>
+</html>
